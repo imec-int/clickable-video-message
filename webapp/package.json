@@ -1,0 +1,19 @@
+{
+  "name": "clickable-video-message",
+  "description": "",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mixbe/clickable-video-message.git"
+  },
+  "scripts": {
+    "start": "node app"
+  },
+  "dependencies": {
+    "body-parser": "*",
+    "express": "*",
+    "jade": "*",
+    "morgan": "*",
+    "stylus": "*"
+  }
+}
