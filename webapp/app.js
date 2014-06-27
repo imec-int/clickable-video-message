@@ -23,9 +23,24 @@ app.use(express.static(path.join(__dirname, 'public')));
 // ==============================================
 
 app.get('/', function (req, res){
-	res.render('index', { title: "hello express 4" });
+	res.render('index', {
+        title: "Een boodschap voor Sam",
+        name: "Sam",
+        video: 'sam.mp4',
+        image: 'sam.png'
+    });
 });
 
+
+
+app.get('/:name', function (req, res){
+    res.render('index', {
+        title: "Een boodschap voor " + req.params.name,
+        name: req.params.name,
+        video: req.params.name+'.mp4',
+        image: req.params.name+'.png'
+    });
+});
 
 
 // EXPRESS: ERROR HANDLING

@@ -10,4 +10,20 @@ html
 		script(type='text/javascript', src='//code.jquery.com/jquery.min.js')
 		script(type='text/javascript', src='/javascripts/index.js')
 	body
-		=title
+		.wrapper
+			.blackbox
+
+				.thankyou Bedankt #{name}, tot op mijn verjaardagsfeestje!
+				.toobad Kieken, je weet niet wat je mist.
+
+
+				video(autoplay='autoplay')
+					source(src='/video/#{video}', type='video/mp4')
+
+				img.overlayimage(src="/video/#{image}")
+
+				.yesimage
+
+			.choice
+				.yes Ja, ik kom af
+				.no Helaas, ik kan niet
