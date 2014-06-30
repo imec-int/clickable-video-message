@@ -8,6 +8,8 @@ var bodyParser = require('body-parser');
 var nodemailer = require('nodemailer');
 var transport = nodemailer.createTransport('sendmail');
 
+var videodata = require('./videodata');
+
 // EXPRESS: BASE SETUP
 // ==============================================
 var app     = express();
@@ -29,23 +31,31 @@ if (app.get('env') === 'development') {
 // EXPRESS: ROUTES
 // ==============================================
 
+app.get('/', function (req, res){
+	renderVideoMessage('sam', res);
+});
 
-function renderVideoMessage (name, res) {
+app.get('/:id', function (req, res){
+	renderVideoMessage(req.params.id, res);
+});
+
+function renderVideoMessage (id, res) {
+	var person = videodata[id];
+	if(!person) return renderWrongId(id, res);
+
+
 	res.render('index', {
-		title: "Een boodschap voor " + name,
-		name: name,
-		video: name+'.mp4'
+		title: "Een boodschap voor " + person.name,
+		name: person.name,
+		video: person.video
 	});
 }
 
-app.get('/', function (req, res){
-	renderVideoMessage('Sam', res);
-});
-
-app.get('/:name', function (req, res){
-	renderVideoMessage(req.params.name, res);
-});
-
+function renderWrongId (id, res) {
+	res.render('wrongid', {
+		id: id
+	});
+}
 
 app.post('/rest/accept', function (req, res){
 	var name = req.body.name;
@@ -111,7 +121,7 @@ function sendAcceptanceMail(name, reference){
 		from    : "Martijn's videoboodschap <videoboodschap@mixlab.be>",
 		to      : "Sam Decrock <sam.decrock@iminds.be>",
 		subject : "Videoboodschap: bevestiging van " + name,
-		text    : name + " laat weten dat hij afkomt naar het verjaardagsfeestje van Martijn\n\n("+reference+")\n"
+		text    : name + " laat weten dat hij/zij afkomt naar het verjaardagsfeestje van Martijn\n\n("+reference+")\n"
 	};
 	// console.log(mailoptions);
 	transport.sendMail(mailoptions);
@@ -122,7 +132,7 @@ function sendDeclineMail(name){
 		from    : "Martijn's videoboodschap <videoboodschap@mixlab.be>",
 		to      : "Sam Decrock <sam.decrock@iminds.be>",
 		subject : "Videoboodschap: " + name + "komt niet",
-		text    : name + " laat weten dat hij geen zin heeft om af te komen. Wat een kieken!\n"
+		text    : name + " laat weten dat hij/zij geen zin heeft om af te komen. Wat een kieken!\n"
 	};
 	// console.log(mailoptions);
 	transport.sendMail(mailoptions);
