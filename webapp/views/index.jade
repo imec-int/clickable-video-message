@@ -7,18 +7,27 @@ html
 		meta(name='apple-mobile-web-app-capable', content='yes')
 		link(rel='stylesheet', href='stylesheets/style.css')
 
-		script(type='text/javascript', src='//code.jquery.com/jquery.min.js')
+		script(type='text/javascript', src='/vendor/jquery-2.1.1.min.js')
+		script(type='text/javascript', src="/vendor/fastclick.js")
+
 		script(type='text/javascript', src='/javascripts/index.js')
 	body
 		.content
-			video(autoplay='autoplay')
+			//- video(autoplay='autoplay')
+			video
 				source(src='/video/#{video}', type='video/mp4')
 
 			.overlay
-				.thankyou Bedankt #{name}, tot op mijn verjaardagsfeestje!
-				.toobad Kieken, je weet niet wat je mist.
+				//- only needed on iPhone/iPod:
+				img.endimage(src='/video/end.png')
 
-				.play ►
+				.response.thankyou
+					p Bedankt #{name}, tot op mijn verjaardagsfeestje!
+				.response.toobad
+					p Kieken, je weet niet wat je mist.
+
+				img.play(src='/images/playbutton.png')
+
 
 				.yesimage
 
