@@ -2,7 +2,7 @@
 
 var express = require('express');
 var path = require('path');
-var logger = require('morgan');
+var morgan = require('morgan');
 var bodyParser = require('body-parser');
 
 var nodemailer = require('nodemailer');
@@ -15,11 +15,15 @@ var port    = process.env.PORT || 3000;
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-app.use(logger('tiny'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Only use logger for development environment
+if (app.get('env') === 'development') {
+	app.use(morgan('dev'));
+}
 
 
 // EXPRESS: ROUTES
