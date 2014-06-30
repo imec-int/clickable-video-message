@@ -119,7 +119,8 @@ console.log('Express server listening on port ' + port);
 function sendAcceptanceMail(name, reference){
 	var mailoptions = {
 		from    : "Martijn's videoboodschap <videoboodschap@mixlab.be>",
-		to      : "Sam Decrock <sam.decrock@iminds.be>",
+		// to      : "Sam Decrock <sam.decrock@iminds.be>",
+		to      : "Els Vandenbulcke <els.vandenbulcke@iminds.be>",
 		subject : "Videoboodschap: bevestiging van " + name,
 		text    : name + " laat weten dat hij/zij afkomt naar het verjaardagsfeestje van Martijn\n\n("+reference+")\n"
 	};
@@ -130,7 +131,8 @@ function sendAcceptanceMail(name, reference){
 function sendDeclineMail(name){
 	var mailoptions = {
 		from    : "Martijn's videoboodschap <videoboodschap@mixlab.be>",
-		to      : "Sam Decrock <sam.decrock@iminds.be>",
+		// to      : "Sam Decrock <sam.decrock@iminds.be>",
+		to      : "Els Vandenbulcke <els.vandenbulcke@iminds.be>",
 		subject : "Videoboodschap: " + name + "komt niet",
 		text    : name + " laat weten dat hij/zij geen zin heeft om af te komen. Wat een kieken!\n"
 	};
