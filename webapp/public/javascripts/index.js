@@ -60,13 +60,14 @@ var App = function (options){
 
 
 	var onPlayClicked = function (event) {
+		$('.play').addClass('hide'); //hide play icon
 		video.play();
 	};
 
 
 	var onVideoTimeupdate = function (event) {
 		if(video.paused) return;
-		$('.play').hide(); //hide play icon
+		$('.play').addClass('hide'); //hide play icon
 
 		var time = event.target.currentTime;
 		if(time > handTime){
