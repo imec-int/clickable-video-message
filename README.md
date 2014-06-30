@@ -1,4 +1,4 @@
 clickable-video-message
 =======================
 
-Click to hand to confirm your subscription :-)
+Click my hand to confirm your subscription :-)

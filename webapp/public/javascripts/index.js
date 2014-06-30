@@ -97,14 +97,17 @@ var App = function (options){
 
 	var onVideoYesClick = function (event) {
 		showThankyouMessage();
+		$.post('/rest/accept', {name: options.name, reference: 'hand click'});
 	};
 
 	var onChoiceYesClick = function (event) {
 		showThankyouMessage();
+		$.post('/rest/accept', {name: options.name, reference: 'text click'});
 	};
 
 	var onChoiceNoClick = function (event) {
 		showToobadMessage();
+		$.post('/rest/decline', {name: options.name});
 	};
 
 	var showChoise = function () {
@@ -162,8 +165,5 @@ var App = function (options){
 
 
 
-$(function(){
-	var app = new App();
-	app.init();
-});
+
 

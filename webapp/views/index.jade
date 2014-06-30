@@ -11,6 +11,14 @@ html
 		script(type='text/javascript', src="/vendor/fastclick.js")
 
 		script(type='text/javascript', src='/javascripts/index.js')
+
+		script.
+			$(function(){
+				var app = new App({
+					name: '#{name}'
+				});
+				app.init();
+			});
 	body
 		.content
 			//- video(autoplay='autoplay')
