@@ -75,7 +75,9 @@ var App = function (options){
 	};
 
 	var onVideoEnded = function (event) {
-
+		if (typeof video.webkitExitFullscreen !== "undefined") {
+			video.webkitExitFullscreen();
+		}
 	};
 
 	var onVideoEndFullscreen = function (event) {
