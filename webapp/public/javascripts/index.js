@@ -4,6 +4,7 @@ var App = function (options){
 
 	var $video = $("video");
 	var video = $video[0];
+	var choiceVisible = false;
 
 	var init = function (){
 		console.log("init");
@@ -19,10 +20,6 @@ var App = function (options){
 		$video.bind('webkitendfullscreen', onVideoEndFullscreen);
 
 		$('.play').click(onPlayClicked);
-
-		$('.yesimage').click(onVideoYesClick);
-		$('.choice .yes').click(onChoiceYesClick);
-		$('.choice .no').click(onChoiceNoClick);
 	};
 
 	var initOverlay = function () {
@@ -111,17 +108,31 @@ var App = function (options){
 	};
 
 	var showChoise = function () {
+		if(choiceVisible) return;
+
 		$('.choice').addClass('show');
 		$('.yesimage').addClass('show');
+
+		$('.yesimage').on('click', onVideoYesClick);
+		$('.choice .yes').on('click', onChoiceYesClick);
+		$('.choice .no').on('click', onChoiceNoClick);
+
+		choiceVisible = true;
 	};
 
 	var hideChoice = function (callback) {
+		$('.yesimage').off('click', onVideoYesClick);
+		$('.choice .yes').off('click', onChoiceYesClick);
+		$('.choice .no').off('click', onChoiceNoClick);
+
 		$('.choice').removeClass('show');
 		$('.yesimage').removeClass('show');
 
 		$('.yesimage').one('transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd', function () { // 'one' executes the function only once
 			if(callback) callback();
 		});
+
+		choiceVisible = false;
 	};
 
 	var showThankyouMessage = function () {
