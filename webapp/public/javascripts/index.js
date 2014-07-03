@@ -57,14 +57,17 @@ var App = function (options){
 
 
 	var onPlayClicked = function (event) {
-		$('.play').addClass('hide'); //hide play icon
+		if(debug) console.log('play clicked');
+		hidePlay();
 		video.play();
 	};
 
 
 	var onVideoTimeupdate = function (event) {
 		if(video.paused) return;
-		$('.play').addClass('hide'); //hide play icon
+		hidePlay();
+
+		if(!handTime) return;
 
 		var time = event.target.currentTime;
 		if(time > handTime){
@@ -160,6 +163,14 @@ var App = function (options){
 			setTimeout(function () {
 				$('.toobad p').addClass('show');
 			},400);
+		});
+	};
+
+
+	var hidePlay = function () {
+		$('.play').addClass('hide'); //hide play icon
+		$('.play').one('transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd', function () { // 'one' executes the function only once
+			$('.play').hide();
 		});
 	};
 
