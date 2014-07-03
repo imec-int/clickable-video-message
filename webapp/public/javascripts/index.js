@@ -1,6 +1,6 @@
 var App = function (options){
 
-	var debug = true;
+	var debug = false;
 
 	var person = options.person;
 
