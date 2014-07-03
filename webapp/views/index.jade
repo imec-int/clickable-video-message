@@ -15,7 +15,7 @@ html
 		script.
 			$(function(){
 				var app = new App({
-					name: '#{name}'
+					person: !{JSON.stringify(person)}
 				});
 				app.init();
 			});
@@ -30,9 +30,17 @@ html
 				img.endimage(src='/video/end.png')
 
 				.response.thankyou
-					p Bedankt #{name}, tot op mijn verjaardagsfeestje!
+					p
+						| Alvast bedankt.
+						br
+						| Studio media gaat door op 23 oktober (namiddag).
+						br
+						| We nemen spoedig contact met u op.
 				.response.toobad
-					p Kieken, je weet niet wat je mist.
+					p
+						| Jammer.
+						br
+						| Maar tot zeker een volgende gelegenheid!
 
 				.yesimage
 
@@ -40,5 +48,13 @@ html
 
 
 				.choice
-					.yes Ja, ik kom af
-					.no Helaas, ik kan niet
+					.yes Ik wil er graag bij zijn.
+					.no Dit lukt jammer genoeg niet.
+
+
+
+
+
+
+
+

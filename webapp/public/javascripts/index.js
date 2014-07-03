@@ -1,13 +1,18 @@
 var App = function (options){
 
-	var handTime = 5.5;
+	var debug = true;
+
+	var person = options.person;
+
+	var handTime = null;
+	var handTimeBeforeEnd = 5.5;
 
 	var $video = $("video");
 	var video = $video[0];
 	var choiceVisible = false;
 
 	var init = function (){
-		console.log("init");
+		if(debug) console.log("init");
 		initHandlers();
 		initOverlay();
 
@@ -15,6 +20,8 @@ var App = function (options){
 	};
 
 	var initHandlers = function () {
+		$video.bind('loadedmetadata', onVideoLoadedmetadata);
+		$video.bind('canplay', onVideoCanplay);
 		$video.bind('timeupdate', onVideoTimeupdate);
 		$video.bind('ended', onVideoEnded);
 		$video.bind('webkitendfullscreen', onVideoEndFullscreen);
@@ -23,11 +30,18 @@ var App = function (options){
 	};
 
 	var initOverlay = function () {
-		var videoratio = 1280/720;
-		var maxvideoWidth = 640;
 
 		// resize stuff:
 		$(window).on("load resize orientationchange", function() {
+			var videoratio = 1280/720;
+			var maxvideoWidth = 860;
+
+			// some 'responsiveness':
+			if( $(window).width() < 1280){
+				maxvideoWidth = 640;
+			}
+
+
 			var videoWidth = $(window).width();
 			if(videoWidth>maxvideoWidth) videoWidth = maxvideoWidth;
 			var videoheight = videoWidth/videoratio;
@@ -55,6 +69,15 @@ var App = function (options){
 		});
 	};
 
+	var onVideoLoadedmetadata = function () {
+		handTime = video.duration - handTimeBeforeEnd;
+	};
+
+	var onVideoCanplay = function () {
+		if(debug){
+			video.currentTime = handTime - 2;
+		}
+	};
 
 	var onPlayClicked = function (event) {
 		if(debug) console.log('play clicked');
@@ -99,17 +122,17 @@ var App = function (options){
 
 	var onVideoYesClick = function (event) {
 		showThankyouMessage();
-		$.post('/rest/accept', {name: options.name, reference: 'hand click'});
+		$.post('/rest/accept', {email: person.email, reference: 'hand click'});
 	};
 
 	var onChoiceYesClick = function (event) {
 		showThankyouMessage();
-		$.post('/rest/accept', {name: options.name, reference: 'text click'});
+		$.post('/rest/accept', {email: person.email, reference: 'text click'});
 	};
 
 	var onChoiceNoClick = function (event) {
 		showToobadMessage();
-		$.post('/rest/decline', {name: options.name});
+		$.post('/rest/decline', {email: person.email});
 	};
 
 	var showChoise = function () {

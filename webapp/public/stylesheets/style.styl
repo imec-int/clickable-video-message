@@ -78,7 +78,7 @@
 			text-align center
 			color #FFFFFF
 			text-shadow 1px 1px #000000
-			font-weight bold
+			font-weight 300
 			font-size 20px
 			opacity 0
 			transition opacity 1s
@@ -99,16 +99,24 @@
 			opacity 0
 			transition opacity 1s
 			.yes, .no
-				font-weight bold
+				font-weight 300
 				cursor pointer
 				font-size 20px
 
 			.yes
-				color #009640
+				color #baba20
 
 			.yes:hover, .no:hover
 				text-decoration underline
 
+
+
+// on smartphones:
+@media screen and (max-width: 768px)
+	.content
+		.overlay
+			.response
+				font-size 13px
 
 
 

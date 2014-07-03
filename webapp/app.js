@@ -8,7 +8,9 @@ var bodyParser = require('body-parser');
 var nodemailer = require('nodemailer');
 var transport = nodemailer.createTransport('sendmail');
 
-var videodata = require('./videodata');
+var _ = require('underscore');
+
+var config = require('./config');
 
 // EXPRESS: BASE SETUP
 // ==============================================
@@ -28,26 +30,26 @@ if (app.get('env') === 'development') {
 }
 
 
+
 // EXPRESS: ROUTES
 // ==============================================
 
 app.get('/', function (req, res){
-	renderVideoMessage('sam', res);
+	renderWrongId('none', res);
 });
 
-app.get('/:id', function (req, res){
-	renderVideoMessage(req.params.id, res);
+app.get('/:email', function (req, res){
+	renderVideoMessage(req.params.email, res);
 });
 
-function renderVideoMessage (id, res) {
-	var person = videodata[id];
-	if(!person) return renderWrongId(id, res);
-
+function renderVideoMessage (email, res) {
+	var person = getPerson(email);
+	if(!person) return renderWrongId(email, res);
 
 	res.render('index', {
 		title: "Een boodschap voor " + person.name,
-		name: person.name,
-		video: person.video
+		person: person,
+		video: config.videoroot + person.video
 	});
 }
 
@@ -57,20 +59,51 @@ function renderWrongId (id, res) {
 	});
 }
 
+function getPerson (email) {
+	email = decodeURIComponent(email);
+
+	var person = _.find(config.people, function (person) {
+		return person.email == email;
+	});
+
+	if(person) return person;
+
+	// if person doesn't exist, create one on the fly:
+	var person = _.clone(config.unkownperson);
+	person.email = email;
+	return person;
+}
+
 app.post('/rest/accept', function (req, res){
-	var name = req.body.name;
+	var email = req.body.email;
 	var reference = req.body.reference;
 
-	console.log(name + ' accepts via ' + reference);
-	sendAcceptanceMail(name, reference);
+	var person = getPerson(email);
+	if(!person){
+		console.log(email + ' not found when accepting');
+		return res.json('err');
+	}
+
+	console.log(person.name + ' ('+person.email+') accepts via ' + reference);
+
+	sendAcceptanceMail(person, reference);
+
+	sendConfirmationMail(person);
+
 	res.json('ok');
 });
 
 app.post('/rest/decline', function (req, res){
-	var name = req.body.name;
+	var email = req.body.email;
 
-	console.log(name + ' declines');
-	sendDeclineMail(name);
+	var person = getPerson(email);
+	if(!person){
+		console.log(email + ' not found when declining');
+		return res.json('err');
+	}
+
+	console.log(person.name + ' ('+person.email+') declines');
+	sendDeclineMail(person);
 	res.json('ok');
 });
 
@@ -116,25 +149,47 @@ console.log('Express server listening on port ' + port);
 
 
 
-function sendAcceptanceMail(name, reference){
+function sendAcceptanceMail(person, reference){
 	var mailoptions = {
-		from    : "Martijn's videoboodschap <videoboodschap@mixlab.be>",
-		// to      : "Sam Decrock <sam.decrock@iminds.be>",
-		to      : "Els Vandenbulcke <els.vandenbulcke@iminds.be>",
-		subject : "Videoboodschap: bevestiging van " + name,
-		text    : name + " laat weten dat hij/zij afkomt naar het verjaardagsfeestje van Martijn\n\n("+reference+")\n"
+		from    : person.name + " <"+person.email+">",
+		to      : config.sendUserResponseTo,
+		subject : "Videoboodschap: bevestiging van " + person.name,
+		text    : person.name + " komt naar studio Media. Zeker eens bellen!\n\n("+reference+")\n"
 	};
 	// console.log(mailoptions);
 	transport.sendMail(mailoptions);
 }
 
-function sendDeclineMail(name){
+function sendDeclineMail(person){
 	var mailoptions = {
-		from    : "Martijn's videoboodschap <videoboodschap@mixlab.be>",
-		// to      : "Sam Decrock <sam.decrock@iminds.be>",
-		to      : "Els Vandenbulcke <els.vandenbulcke@iminds.be>",
-		subject : "Videoboodschap: " + name + "komt niet",
-		text    : name + " laat weten dat hij/zij geen zin heeft om af te komen. Wat een kieken!\n"
+		from    : person.name + " <"+person.email+">",
+		to      : config.sendUserResponseTo,
+		subject : "Videoboodschap: " + person.name + "komt niet",
+		text    : person.name + " komt niet, nog eens bellen?\n"
+	};
+	// console.log(mailoptions);
+	transport.sendMail(mailoptions);
+}
+
+
+function sendConfirmationMail (person) {
+	var txt = "";
+	txt += "Hallo "+person.name+"\n";
+	txt += "U heeft net uw interesse getoond om deel te nemen aan Studio Media 2020. Noteer alvast in uw agenda .\n";
+	txt += "23 oktober (de Studio Media zelf zal 2 uur duren in de namiddag- exacte timinds tbc), Square Brussel - \n";
+	txt += "\n";
+	txt += "Wij nemen nog deze zomer contact met u op voor verdere details.\n";
+	txt += "\n";
+	txt += "Vriendelijke groeten,\n";
+	txt += "\n";
+	txt += "Martijn\n";
+
+
+	var mailoptions = {
+		from    : config.sendConfirmationFrom,
+		to      : person.name + "<"+person.email+">",
+		subject : "Bevestiging Studio Media 2020",
+		text    : txt
 	};
 	// console.log(mailoptions);
 	transport.sendMail(mailoptions);
