@@ -30,3 +30,5 @@ node_modules
 
 # Mac OS X shit
 .DS_Store
+
+video_s3
