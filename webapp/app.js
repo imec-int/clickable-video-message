@@ -179,8 +179,10 @@ function sendDeclineMail(person){
 
 
 function sendConfirmationMail (person) {
+	var firstname = person.name.split(' ')[0];
+
 	var txt = "";
-	txt += "Hallo "+person.name+"\n";
+	txt += "Hallo "+firstname+"\n";
 	txt += "\n";
 	txt += "U heeft net uw interesse getoond om deel te nemen aan Studio Media 2020.\n";
 	txt += "Noteer alvast in uw agenda: 23 oktober, Square Brussel.\n";
