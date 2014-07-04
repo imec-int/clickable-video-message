@@ -41,3 +41,21 @@ a
 	text-decoration underline
 .link:hover
 	text-decoration none
+
+
+opacity(value)
+	-moz-opacity value
+	-webkit-opacity value
+	-ms-filter "progid:DXImageTransform.Microsoft.Alpha(Opacity=" + value + ")"
+	filter "alpha(opacity=" + value*100 + ")"
+	opacity value
+
+.show
+	-moz-opacity 1.0 !important
+	-webkit-opacity 1.0 !important
+	-ms-filter "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)" !important
+	filter "alpha(opacity=100)" !important
+	opacity 1.0 !important
+
+
+
