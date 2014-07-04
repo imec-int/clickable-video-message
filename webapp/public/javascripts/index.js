@@ -38,6 +38,7 @@ var App = function (options){
 	var initOverlay = function () {
 
 		// resize stuff:
+		// we're doing this in javascript because the overlay-div should be on exact the same place as the video-element
 		$(window).on("load resize orientationchange", function() {
 			var videoratio = 1280/720;
 			var maxvideoWidth = 860;
@@ -63,38 +64,42 @@ var App = function (options){
 			$('video').offset({ left: x});
 			$('.overlay').offset({ left: x});
 
-			// content also follows height of video:
+			// content (the horizontal gray bar) also follows height of video:
 			$('.content').height( videoheight );
 
 			// yesimage must always be square:
 			$('.yesimage').height(  $('.yesimage').width() );
 
-
 			// show content (if not shown):
+			// that way, the video fades in AFTER all resizing is done
+			// else you'll see some DOM-elements flickering around
 			$('.content').addClass('show');
 		});
 	};
 
 	var onVideoLoadedmetadata = function () {
+		// set the time of the clickable hand based on the lenght of the video:
 		handTime = video.duration - handTimeBeforeEnd;
 	};
 
 	var onVideoCanplay = function () {
 		if(debug){
+			// go straight to 2 seconds before the time the hand should appear:
 			video.currentTime = handTime - 2;
 		}
 	};
 
+	// when our own play button is clicked:
 	var onPlayClicked = function (event) {
 		if(debug) console.log('play clicked');
 		hidePlay();
 		video.play();
 	};
 
-
+	// happens every x seconds when the current position (time) of the video changes:
 	var onVideoTimeupdate = function (event) {
-		if(video.paused) return;
-		hidePlay();
+		if(video.paused) return; // don't to things when the video is paused
+		hidePlay(); // when autoplay is on, this makes sure the play-button is hidden
 
 		if(!handTime) return;
 
@@ -102,11 +107,13 @@ var App = function (options){
 		if(time > handTime){
 			showChoise();
 		}else{
+			// this wil probably never happen because there are no controls:
 			hideChoice();
 		}
 	};
 
 	var onVideoEnded = function (event) {
+		// on iPhone/iPad: close the external Quicktime player at the end of the video:
 		if (typeof video.webkitExitFullscreen !== "undefined") {
 			video.webkitExitFullscreen();
 		}
@@ -128,7 +135,7 @@ var App = function (options){
 
 	var onVideoYesClick = function (event) {
 		showThankyouMessage();
-		$.post('/rest/accept', {email: person.email, reference: 'hand click'});
+		$.post('/rest/accept', {email: person.email, reference: 'hand click'}); // pass the reference of the click, so we can see if the use was smart enough to click the hand
 	};
 
 	var onChoiceYesClick = function (event) {
@@ -142,11 +149,13 @@ var App = function (options){
 	};
 
 	var showChoise = function () {
-		if(choiceVisible) return;
+		if(choiceVisible) return; // do this only once, else click handlers would be added more than once
 
 		$('.choice').addClass('show');
 		$('.yesimage').addClass('show');
 
+		// add handlers here
+		// so one can only click them from now on
 		$('.yesimage').on('click', onVideoYesClick);
 		$('.choice .yes').on('click', onChoiceYesClick);
 		$('.choice .no').on('click', onChoiceNoClick);
