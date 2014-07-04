@@ -1,6 +1,7 @@
 var App = function (options){
 
 	var debug = false;
+	var debughand = false;
 
 	var person = options.person;
 
@@ -31,6 +32,8 @@ var App = function (options){
 		$video.bind('timeupdate', onVideoTimeupdate);
 		$video.bind('ended', onVideoEnded);
 		$video.bind('webkitendfullscreen', onVideoEndFullscreen);
+
+		if(video.readyState == 4) showPlay(); // if handlers are set after the event has fired, not sure if that will happen
 
 		if(isiOS()){
 			showPlay(); //canplay doesnt fire on iOS, so show the playbutton directly
@@ -82,16 +85,13 @@ var App = function (options){
 	};
 
 	var onVideoLoadedmetadata = function () {
+		if(debug) console.log('video loadedmetadata');
 		setHandTime();
 	};
 
 	var onVideoCanplay = function () {
-		if(debug){
-			console.log('video ready');
-
-			// go straight to 2 seconds before the time the hand should appear:
-			video.currentTime = handTime - 2;
-		}
+		if(debug) console.log('video canplay');
+		if(debughand) video.currentTime = handTime - 2; // go straight to 2 seconds before the time the hand should appear:
 
 		showPlay();
 	};
