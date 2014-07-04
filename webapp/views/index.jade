@@ -23,7 +23,9 @@ html
 		.content
 			//- video(autoplay='autoplay')
 			video(poster='/video/poster.png')
-				source(src='#{video}', type='video/mp4')
+				source(src='#{mp4}', type='video/mp4')
+				source(src='#{ogg}', type='video/ogg')
+				source(src='#{webm}', type='video/webm')
 
 			.overlay
 				//- only needed on iPhone/iPod:

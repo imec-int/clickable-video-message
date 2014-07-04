@@ -49,7 +49,9 @@ function renderVideoMessage (email, res) {
 	res.render('index', {
 		title: "Een boodschap voor " + person.name,
 		person: person,
-		video: config.videoroot + person.video
+		mp4: config.videoroot + person.video,
+		ogg: config.videoroot + person.video.replace('.mp4', '.ogg'),
+		webm: config.videoroot + person.video.replace('.mp4', '.webm')
 	});
 }
 
