@@ -108,6 +108,8 @@ var App = function (options){
 		if(debug) console.log('play clicked');
 		hidePlay();
 		video.play();
+
+		_gaq.push(['_trackEvent', 'video', 'users clicks play']);
 	};
 
 	// happens every x seconds when the current position (time) of the video changes:
@@ -122,6 +124,8 @@ var App = function (options){
 		var time = event.target.currentTime;
 		if(time > handTime){
 			showChoise();
+
+			_gaq.push(['_trackEvent', 'video', 'users watches till hand shows up']);
 		}else{
 			// this wil probably never happen because there are no controls:
 			hideChoice();
@@ -152,16 +156,22 @@ var App = function (options){
 	var onVideoYesClick = function (event) {
 		showThankyouMessage();
 		$.post('/rest/accept', {email: person.email, reference: 'hand click'}); // pass the reference of the click, so we can see if the use was smart enough to click the hand
+
+		_gaq.push(['_trackEvent', 'accept/reject', 'users accepts', 'hand']);
 	};
 
 	var onChoiceYesClick = function (event) {
 		showThankyouMessage();
 		$.post('/rest/accept', {email: person.email, reference: 'text click'});
+
+		_gaq.push(['_trackEvent', 'accept/reject', 'users accepts', 'text']);
 	};
 
 	var onChoiceNoClick = function (event) {
 		showToobadMessage();
 		$.post('/rest/decline', {email: person.email});
+
+		_gaq.push(['_trackEvent', 'accept/reject', 'users rejects']);
 	};
 
 	var showChoise = function () {
