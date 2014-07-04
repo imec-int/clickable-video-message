@@ -159,9 +159,6 @@ function sendAcceptanceMail(person, reference){
 		text    : person.name + " ("+person.email+") komt naar studio Media. Zeker eens bellen!\n\n("+reference+")\n"
 	};
 
-	if(config.sendUserResponseToCC)
-		mailoptions.cc = config.sendUserResponseToCC;
-
 	// console.log(mailoptions);
 	transport.sendMail(mailoptions);
 }
@@ -201,6 +198,10 @@ function sendConfirmationMail (person) {
 		subject : "Bevestiging Studio Media 2020",
 		text    : txt
 	};
+
+	if(config.sendConfirmationFromReplyTo)
+		mailoptions.replyTo = config.sendConfirmationFromReplyTo;
+
 	// console.log(mailoptions);
 	transport.sendMail(mailoptions);
 }
