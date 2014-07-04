@@ -167,7 +167,7 @@ function sendDeclineMail(person){
 	var mailoptions = {
 		from    : person.name + " <"+person.email+">",
 		to      : config.sendUserResponseTo,
-		subject : "Videoboodschap: " + person.name + "komt niet",
+		subject : "Videoboodschap: " + person.name + " komt niet",
 		text    : person.name + " ("+person.email+") komt niet, nog eens bellen?\n"
 	};
 	// console.log(mailoptions);
@@ -198,7 +198,12 @@ function sendConfirmationMail (person) {
 		from    : config.sendConfirmationFrom,
 		to      : person.name + "<"+person.email+">",
 		subject : "Bevestiging Studio Media 2020",
-		text    : txt
+		text    : txt,
+		alternatives: [{
+			contentType: "text/calendar",
+			contents: new Buffer(config.ical),
+			contentEncoding: "7bit"
+		}]
 	};
 
 	if(config.sendConfirmationFromReplyTo)
