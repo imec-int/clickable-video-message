@@ -32,6 +32,10 @@ var App = function (options){
 		$video.bind('ended', onVideoEnded);
 		$video.bind('webkitendfullscreen', onVideoEndFullscreen);
 
+		if(isiOS()){
+			showPlay(); //canplay doesnt fire on iOS, so show the playbutton directly
+		}
+
 		$('.play').click(onPlayClicked);
 	};
 
@@ -83,6 +87,10 @@ var App = function (options){
 	};
 
 	var onVideoCanplay = function () {
+		if(debug) console.log('video ready');
+
+		showPlay();
+
 		if(debug){
 			// go straight to 2 seconds before the time the hand should appear:
 			video.currentTime = handTime - 2;
@@ -204,6 +212,10 @@ var App = function (options){
 		});
 	};
 
+	var showPlay = function () {
+		$('.spinner').hide(); // remove spinner
+		$('.play').show(); //show play icon
+	};
 
 	var hidePlay = function () {
 		$('.play').addClass('hide'); //hide play icon
@@ -213,11 +225,11 @@ var App = function (options){
 	};
 
 	var isIphoneIpod = function () {
-		if((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i))) {
-			return true;
-		}else{
-			return false;
-		}
+		return /(iPhone|iPod)/g.test( navigator.userAgent );
+	};
+
+	var isiOS = function () {
+		return /(iPad|iPhone|iPod)/g.test( navigator.userAgent );
 	};
 
 	var canPlayHtml5Video = function () {
