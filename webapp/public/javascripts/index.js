@@ -82,19 +82,25 @@ var App = function (options){
 	};
 
 	var onVideoLoadedmetadata = function () {
-		// set the time of the clickable hand based on the lenght of the video:
-		handTime = video.duration - handTimeBeforeEnd;
+		setHandTime();
 	};
 
 	var onVideoCanplay = function () {
-		if(debug) console.log('video ready');
-
-		showPlay();
-
 		if(debug){
+			console.log('video ready');
+
 			// go straight to 2 seconds before the time the hand should appear:
 			video.currentTime = handTime - 2;
 		}
+
+		showPlay();
+	};
+
+	var setHandTime = function () {
+		// set the time of the clickable hand based on the length of the video:
+		if(video.duration == 1) return; // some bug in Android
+
+		handTime = video.duration - handTimeBeforeEnd;
 	};
 
 	// when our own play button is clicked:
@@ -108,6 +114,8 @@ var App = function (options){
 	var onVideoTimeupdate = function (event) {
 		if(video.paused) return; // don't to things when the video is paused
 		hidePlay(); // when autoplay is on, this makes sure the play-button is hidden
+
+		setHandTime();
 
 		if(!handTime) return;
 
