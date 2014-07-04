@@ -158,6 +158,10 @@ function sendAcceptanceMail(person, reference){
 		subject : "Videoboodschap: bevestiging van " + person.name,
 		text    : person.name + " ("+person.email+") komt naar studio Media. Zeker eens bellen!\n\n("+reference+")\n"
 	};
+
+	if(config.sendUserResponseToCC)
+		mailoptions.cc = config.sendUserResponseToCC;
+
 	// console.log(mailoptions);
 	transport.sendMail(mailoptions);
 }
