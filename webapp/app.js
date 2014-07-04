@@ -177,8 +177,10 @@ function sendDeclineMail(person){
 function sendConfirmationMail (person) {
 	var txt = "";
 	txt += "Hallo "+person.name+"\n";
-	txt += "U heeft net uw interesse getoond om deel te nemen aan Studio Media 2020. Noteer alvast in uw agenda .\n";
-	txt += "23 oktober (de Studio Media zelf zal 2 uur duren in de namiddag- exacte timinds tbc), Square Brussel - \n";
+	txt += "\n";
+	txt += "U heeft net uw interesse getoond om deel te nemen aan Studio Media 2020.\n";
+	txt += "Noteer alvast in uw agenda: 23 oktober, Square Brussel.\n";
+	txt += "De Studio Media vind plaats in de namiddag en zal zo'n 2 uur duren, exacte timings volgen nog.\n";
 	txt += "\n";
 	txt += "Wij nemen nog deze zomer contact met u op voor verdere details.\n";
 	txt += "\n";
