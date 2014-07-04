@@ -20,6 +20,12 @@ var App = function (options){
 	};
 
 	var initHandlers = function () {
+
+		// just show choice for the people who can't play html5 video:
+		if(!canPlayHtml5Video()){
+			showChoise();
+		}
+
 		$video.bind('loadedmetadata', onVideoLoadedmetadata);
 		$video.bind('canplay', onVideoCanplay);
 		$video.bind('timeupdate', onVideoTimeupdate);
@@ -203,6 +209,10 @@ var App = function (options){
 		}else{
 			return false;
 		}
+	};
+
+	var canPlayHtml5Video = function () {
+		return (typeof(document.createElement('video').canPlayType) != 'undefined');
 	};
 
 	return {
