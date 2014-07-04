@@ -156,7 +156,7 @@ function sendAcceptanceMail(person, reference){
 		from    : person.name + " <"+person.email+">",
 		to      : config.sendUserResponseTo,
 		subject : "Videoboodschap: bevestiging van " + person.name,
-		text    : person.name + " komt naar studio Media. Zeker eens bellen!\n\n("+reference+")\n"
+		text    : person.name + " ("+person.email+") komt naar studio Media. Zeker eens bellen!\n\n("+reference+")\n"
 	};
 	// console.log(mailoptions);
 	transport.sendMail(mailoptions);
@@ -167,7 +167,7 @@ function sendDeclineMail(person){
 		from    : person.name + " <"+person.email+">",
 		to      : config.sendUserResponseTo,
 		subject : "Videoboodschap: " + person.name + "komt niet",
-		text    : person.name + " komt niet, nog eens bellen?\n"
+		text    : person.name + " ("+person.email+") komt niet, nog eens bellen?\n"
 	};
 	// console.log(mailoptions);
 	transport.sendMail(mailoptions);
